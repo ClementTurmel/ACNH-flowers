@@ -3,7 +3,7 @@ from flowers import *
 from helper import is_one_of_instance_of
 from markdown_writter import *
 
-
+#python -m pytest test_flowers.py
 
 @pytest.fixture
 def doc(scope="module"):
@@ -22,18 +22,18 @@ class Test_red_rose_next_to_another_red_rose:
         
         possibilities = hybridize(f1, f2)
 
-        doc.log(f"it can gives {'or'.join([doc.img(image) for image in possibilities.images()])}")
+        doc.log(f"- it can gives {'or'.join([doc.img(image) for image in possibilities.images()])}")
 
-        assert 2 == len(possibilities.flowers)
-        assert 1 == len([f for f in possibilities.flowers if isinstance(f.flower, PinkRose)])
-        assert 1 == len([f for f in possibilities.flowers if isinstance(f.flower, BlackRose)])
+        assert 2 == len(possibilities.possibilities)
+        assert 1 == len([f for f in possibilities.possibilities if isinstance(f.flower, PinkRose)])
+        assert 1 == len([f for f in possibilities.possibilities if isinstance(f.flower, BlackRose)])
 
     
     def test_both_two_roses_produced_have_25_percent_chance(self):
         possibilities = hybridize(RedRose(), RedRose())
 
-        possibilities.flowers[0].percent = 25
-        possibilities.flowers[1].percent = 25
+        possibilities.possibilities[0].percent = 25
+        possibilities.possibilities[1].percent = 25
 
     def test_produce_ramdomly_return_a_flower_based_on_possibilities_percent(self):
         possibilities = hybridize(RedRose(), RedRose())

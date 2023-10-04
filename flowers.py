@@ -30,21 +30,21 @@ class Possibility():
         self.percent = percent
 
 
-class Possibilities(): #TODO find a better name ? Hybridization ?
-    flowers:List[Possibility] 
+class Hybridization(): #TODO find a better name ? Hybridization ?
+    possibilities:List[Possibility] 
 
     def __init__(self, flowers:List[Possibility]) -> None:
-        self.flowers = flowers
+        self.possibilities = flowers
 
     def images(self):
-        return [possibility.flower.image for possibility in self.flowers]
+        return [possibility.flower.image for possibility in self.possibilities]
 
     
     def produce(self):
         rand = random()
         percent_cumul = 0
         winner_flower = None
-        for flower_probabilty in self.flowers:
+        for flower_probabilty in self.possibilities:
             percent_cumul += flower_probabilty.percent
             if rand < (percent_cumul / 100):
                 winner_flower = flower_probabilty.flower
@@ -55,7 +55,7 @@ class Possibilities(): #TODO find a better name ? Hybridization ?
 
 def hybridize(flower1, flower2):
     if isinstance(flower1, RedRose) and isinstance(flower2, RedRose):
-        return Possibilities([
+        return Hybridization([
             Possibility(flower=PinkRose(),  percent=25), 
             Possibility(flower=BlackRose(), percent=25)
         ])
