@@ -1,8 +1,12 @@
 class MarkdownWritter:
+    cariage_return:str
     data:str = ""
 
+    def __init__(self, carriage_return = "\n\n") -> None:
+        self.cariage_return = carriage_return
+
     def log(self, content):
-        self.data += f"{content}\n"
+        self.data += f"{content}{self.cariage_return}"
 
     def dump(self):
         return self.data
