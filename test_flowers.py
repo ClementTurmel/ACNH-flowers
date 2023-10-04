@@ -5,40 +5,38 @@ from markdown_writter import *
 
 #python -m pytest test_flowers.py
 
-@pytest.fixture
-def doc(scope="module"):
+@pytest.fixture(scope="module")
+def doc():
     doc = MarkdownWritter()
     yield doc
     doc.dump_in_file("documentation/test_flowers.md")
 
 
-class Test_red_rose_next_to_another_red_rose:
+@pytest.fixture(scope="module")
+def hybridization(doc):
+    f1 = RedRose()
+    f2 = RedRose()
+    doc.log(f"given {doc.img(f1.image)} and {doc.img(f2.image)}")
+    return hybridize(f1, f2)
 
-    def test_it_can_produce_pink_rose_or_black_rose(self, doc):
-        f1 = RedRose()
-        f2 = RedRose()
+def test_it_can_produce_pink_rose_or_black_rose(hybridization, doc):
 
-        doc.log(f"given {doc.img(f1.image)} and {doc.img(f2.image)}")
-        
-        possibilities = hybridize(f1, f2)
+    doc.log(f"it can gives {'or'.join([doc.img(image) for image in hybridization.images()])}")
 
-        doc.log(f"- it can gives {'or'.join([doc.img(image) for image in possibilities.images()])}")
+    assert 2 == len(hybridization.possibilities)
+    assert 1 == len([f for f in hybridization.possibilities if isinstance(f.flower, PinkRose)])
+    assert 1 == len([f for f in hybridization.possibilities if isinstance(f.flower, BlackRose)])
 
-        assert 2 == len(possibilities.possibilities)
-        assert 1 == len([f for f in possibilities.possibilities if isinstance(f.flower, PinkRose)])
-        assert 1 == len([f for f in possibilities.possibilities if isinstance(f.flower, BlackRose)])
 
-    
-    def test_both_two_roses_produced_have_25_percent_chance(self):
-        possibilities = hybridize(RedRose(), RedRose())
+def test_both_two_roses_produced_have_25_percent_chance(hybridization, doc):
 
-        possibilities.possibilities[0].percent = 25
-        possibilities.possibilities[1].percent = 25
+    hybridization.possibilities[0].percent = 25
+    hybridization.possibilities[1].percent = 25
+    doc.log(f"with probability {','.join([f'{doc.img(possibility.flower.image)}{possibility.percent}%' for possibility in hybridization.possibilities])}")
 
-    def test_produce_ramdomly_return_a_flower_based_on_possibilities_percent(self):
-        possibilities = hybridize(RedRose(), RedRose())
+def test_produce_ramdomly_return_a_flower_based_on_possibilities_percent(hybridization):
 
-        flower = possibilities.produce()
-        assert is_one_of_instance_of(flower, [PinkRose, BlackRose, None])
+    flower = hybridization.produce()
+    assert is_one_of_instance_of(flower, [PinkRose, BlackRose, None])
 
 
