@@ -30,8 +30,8 @@ def test_it_can_produce_pink_rose_or_black_rose(hybridization, doc):
 
 def test_both_two_roses_produced_have_25_percent_chance(hybridization, doc):
 
-    hybridization.possibilities[0].percent = 25
-    hybridization.possibilities[1].percent = 25
+    assert hybridization.possibilities[0].percent == 25
+    assert hybridization.possibilities[1].percent == 25
     doc.log(f"with probability {','.join([f'{doc.img(possibility.flower.image)}{possibility.percent}%' for possibility in hybridization.possibilities])}")
 
 def test_produce_ramdomly_return_a_flower_based_on_possibilities_percent(hybridization):
